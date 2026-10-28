@@ -1,7 +1,49 @@
 ---
-title: "Analysis 1"
+title: "A Beautiful Graphic"
 format: html
 author: Alexa Titherington
+execute:
+  echo: false
+  message: false
+  warning: false
 ---
 
 Alexa is a data maestro!
+
+
+```{r}
+#| message: false
+library(tidyverse)
+```
+
+```{r}
+airquality |>
+  mutate(
+    date = as.Date(sprintf("1973-%02d-%02d", Month, Day)),
+    month = factor(Month, levels = 5:9, labels = month.abb[5:9])
+  ) |>
+  ggplot(aes(x = date, y = Ozone)) +
+  geom_line(aes(group = month), color = "#52677D", linewidth = 0.8, na.rm = TRUE) +
+  geom_point(aes(color = month), size = 2.8, alpha = 0.9, na.rm = TRUE) +
+  scale_color_manual(
+    values = c(
+      "May" = "#6F9E9A", "Jun" = "#E5A66B", "Jul" = "#D97868",
+      "Aug" = "#8B83B5", "Sep" = "#6D8FB3"
+    ),
+    name = "Month"
+  ) +
+  labs(
+    title = "Summer air, day by day",
+    subtitle = "Daily ozone measurements in New York, May–September 1973",
+    x = NULL,
+    y = "Ozone (parts per billion)",
+    caption = "Gaps indicate days with no ozone reading."
+  ) +
+  theme_minimal(base_size = 13) +
+  theme(
+    plot.title = element_text(face = "bold", color = "#34495E"),
+    plot.subtitle = element_text(color = "#627D98"),
+    legend.position = "bottom",
+    panel.grid.minor = element_blank()
+  )
+```
